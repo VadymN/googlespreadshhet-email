@@ -1,0 +1,36 @@
+var ID = ""; //speadsheet id
+var EMAIL = "vadym@shema.team"; //email 
+var RANGE = "Balance!C10:E11"; //data range to send
+var check = "Balance!E11:E11"; //parametrs
+var text = ""; //subject
+
+function sendData() {
+  var spreadsheet = SpreadsheetApp.openById(ID);
+  var data = spreadsheet.getRangeByName(RANGE).getValues();
+  var message = {};
+  if (SpreadsheetApp.openById(ID).getRangeByName(check).getValues()<6){ //condition
+  message.subject = "[SHEMA]" + text;
+  message.to = EMAIL;
+  message.htmlBody = dataToHtmlTable_(data) +
+    "<br><br>[SHEMA]";
+  MailApp.sendEmail(message);
+  }
+}
+
+Array.prototype.datesToString = function(){
+  return this.map(function(row){
+    return row.map(function(cell){
+      return cell && cell.getTime ? Utilities.formatDate(cell, Session.getScriptTimeZone(), "yyyy-MM-dd") : cell;
+    });
+  });
+}
+
+
+function dataToHtmlTable_(data){
+  return JSON.stringify(data, null, "  ")
+  .replace(/^\[/g, "<table>")
+  .replace(/\]$/g, "</table>")
+  .replace(/^\s\s\[$/mg, "<tr>")
+  .replace(/^\s\s\],{0,1}$/mg, "</tr>")
+  .replace(/^\s{4}"{0,1}(.*?)"{0,1},{0,1}$/mg, "<td>$1</td>");
+}
