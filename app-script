@@ -1,7 +1,7 @@
 var ID = ""; //speadsheet id
 var EMAIL = "vadym@shema.team"; //email 
 var RANGE = ""; //data range to send
-var check = ""; //parametrs
+var check = ""; //parametr
 var text = ""; //subject
 
 function sendData() {
